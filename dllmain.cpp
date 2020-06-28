@@ -61,11 +61,19 @@ void OpenConsole() {
 }
 
 void LoadDLL(LPWSTR moduleName) {
-    LoadLibraryW(moduleName);
+    if (LoadLibraryW(moduleName)) {
+        std::wcout << moduleName << " loaded!" << std::endl;
+    }
+    else {
+        std::wcout << moduleName << " failed to load: " << GetLastError() << std::endl;
+    }
 }
 
 LPCWSTR consoleFlag = L"-console";
 LPCWSTR loadDLLFlag = L"-loaddll";
+LPCWSTR failloadFlag = L"-fail";
+
+bool fail = false;
 
 void CheckParams() {
     int argc = 0;
@@ -81,6 +89,12 @@ void CheckParams() {
     for (int c = 0; c < argc; c++) {
         if (!wcscmp(argv[c], loadDLLFlag) && ++c < argc) {
             LoadDLL(argv[c]);
+        }
+    }
+
+    for (int c = 0; c < argc; c++) {
+        if (!wcscmp(argv[c], failloadFlag) && ++c < argc) {
+            fail = true;
         }
     }
 }
@@ -99,6 +113,5 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_PROCESS_DETACH:
         break;
     }
-    return TRUE;
+    return !fail;
 }
-
