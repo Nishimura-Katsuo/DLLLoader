@@ -7,7 +7,7 @@ It enables these command line options:
 
 ---
 
--loaddll "C:\path\to\your\target.dll"
+`-loaddll "C:\path\to\your\target.dll"`
 
 *This option loads the target dll using 'LoadLibraryW'*
 
